@@ -1,2 +1,3 @@
 atproto==0.0.55
+azure-ai-inference
 
