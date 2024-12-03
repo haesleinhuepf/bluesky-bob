@@ -2,7 +2,7 @@ name: Respond to posts on bluesky
 
 on:
   schedule:
-    - cron: '0 * * * *'  # This runs the job every hour
+    - cron: '15 * * * *'  # This runs the job every hour
 
 jobs:
   run-hourly:
