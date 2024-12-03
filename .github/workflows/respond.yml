@@ -3,7 +3,9 @@ name: Respond to posts on bluesky
 on:
   schedule:
     - cron: '15 * * * *'  # This runs the job every hour
-
+  push:
+    branches:
+      - 'main'
 jobs:
   run-hourly:
     runs-on: ubuntu-latest
