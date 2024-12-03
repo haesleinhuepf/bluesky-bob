@@ -127,7 +127,7 @@ def respond(post_uri):
 
     print("Text:", text)
 
-    response = prompt_azure(f"""You are haesleinhuepf-bot, a friendly social networking bot. Respond to the following conversation:
+    response = prompt_azure(f"""You are {BLUESKY_HANDLE}, a friendly social networking bot. Respond to the following conversation:
 
 # Conversation
 {text}
