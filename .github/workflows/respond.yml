@@ -1,0 +1,32 @@
+name: Respond to posts on bluesky
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # This runs the job every hour
+
+jobs:
+  run-weekly-summary:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run Python
+      env:
+        GITHUB_API_KEY: "${{ secrets.GITHUB_TOKEN }}"
+        BLUESKY_API_KEY: "${{ secrets.BLUESKY_API_KEY }}"
+        BLUESKY_USERNAME: "${{ secrets.BLUESKY_USERNAME }}"
+        GH_MODELS_API_KEY: "${{ secrets.GH_MODELS_API_KEY }}"
+      run: |
+        python respond.py
