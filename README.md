@@ -6,6 +6,13 @@ You can see it in action [here](https://bsky.app/profile/haesleinhuepf-bot.bsky.
 
 This is an academic research project and not intended to be used in production.
 
+## Installation
+
+To run this under your own account, you need clone the repository, activate Github actions and configure three secrets in your repository settings:
+* `BLUESKY_API_KEY`
+* `BLUESKY_USERNAME`
+* `GH_MODELS_API_KEY`
+
 ## Contributing
 
 Feedback and contributions are welcome! Just open an issue and let's discuss before you send a pull request. 
