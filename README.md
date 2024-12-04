@@ -3,7 +3,7 @@
 This repository contains code that responds to messages on [bluesky](https://bsky.app/) using large language models via [Github Models Marketplace](https://github.com/marketplace) and the [atproto API](https://github.com/MarshalX/atproto). 
 It runs in the github CI using hourly [scheduled cron jobs](https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#schedule).
 It will only respond to messages from accounts that it follows.
-You can see it in action [here](https://bsky.app/profile/haesleinhuepf-bot.bsky.social).
+You can see it in action [here](https://bsky.app/profile/haesleinhuepf-bot.bsky.social/post/3lcg5xe2b5i2h).
 
 This is an academic research project and not intended to be used in production.
 
