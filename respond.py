@@ -47,6 +47,7 @@ def send_post(message, link=None):
 
 def like_post(post):
     """Like a post"""
+    print("post", post.uri, post.cid)
     client.like(post.uri, post.cid)
 
 def thread_to_text(thread, level=0):
@@ -153,6 +154,7 @@ Keep your response short (max 300 characters).
         'root':reply,
         'py_type':'app.bsky.feed.post#replyRef'
     }
+    print("reply_ref", reply_ref)
 
     client.send_post(response, reply_to=reply_ref)
 
