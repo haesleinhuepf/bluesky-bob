@@ -135,6 +135,7 @@ def respond(post_uri):
 
 # Your response
 Reply to the conversation above as if you were a human talking to a human. 
+Focus on responding to the last message.
 Keep your response short (max 300 characters).
 """).replace(BLUESKY_HANDLE + ":", "").strip()
     print("response:", response)
