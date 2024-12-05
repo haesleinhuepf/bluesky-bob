@@ -136,11 +136,11 @@ def respond(post_uri):
 # Your response
 Reply to the conversation above as if you were a human talking to a human. 
 Focus on responding to the last message.
-Keep your response short (max 300 characters).
+Keep your response short (max 150 characters).
 """).replace(BLUESKY_HANDLE + ":", "").strip()
     print("response:", response)
 
-    if len(response) > 300:
+    if len(response) > 150:
         response = prompt(f"""
 Shorten the following text to 300 characters by extracting the most important part. Respond with the shortened text only.
 
