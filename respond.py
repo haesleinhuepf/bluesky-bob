@@ -140,6 +140,13 @@ Keep your response short (max 300 characters).
 """).replace(BLUESKY_HANDLE + ":", "").strip()
     print("response:", response)
 
+    if len(response) > 300:
+        response = prompt(f"""
+Shorten the following text to 300 characters by extracting the most important part. Respond with the shortened text only.
+
+{response}
+""")
+
     parent = {
           'cid':thread.post.cid,
           'uri':thread.post.uri,
