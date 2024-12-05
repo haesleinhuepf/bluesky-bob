@@ -141,7 +141,7 @@ Keep your response short (max 150 characters).
     print("response:", response)
 
     if len(response) > 150:
-        response = prompt(f"""
+        response = prompt_azure(f"""
 Shorten the following text to 300 characters by extracting the most important part. Respond with the shortened text only.
 
 {response}
