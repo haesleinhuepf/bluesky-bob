@@ -4,6 +4,7 @@ This repository contains code that responds to messages on [bluesky](https://bsk
 It runs in the github CI using hourly [scheduled cron jobs](https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#schedule).
 It will only respond to messages from accounts that it follows.
 You can see it in action [here](https://bsky.app/profile/haesleinhuepf-bot.bsky.social/post/3lcg5xe2b5i2h).
+The bot currently also posts updates from selected Zenodo communities, which is implemented and human-curated [here](https://github.com/haesleinhuepf/zenodo-bluesky-bob).
 
 This is an academic research project and not intended to be used in production.
 
