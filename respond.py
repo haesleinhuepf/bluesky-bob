@@ -189,7 +189,7 @@ for notification in response.notifications:
         print(f'Got new notification! Type: {notification.reason}; from: {notification.author.did}')
 
         # If the notification is a like from someone I'm following:
-        if notification.author.did in follower_dids and notification.reason not in ['like']:
+        if notification.author.did in follower_dids and notification.reason not in ['like', 'follow', 'repost']:
             print("Liking")
             thread = client.get_post_thread(notification.uri).thread
             like_post(thread.post)
