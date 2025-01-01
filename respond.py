@@ -1,42 +1,6 @@
 import os
 from atproto import Client, client_utils, models
 
-
-
-def pretty_print(s):
-    """Helper function for debugging. It prints out atproto objects nicely."""
-    indent = 0
-    result = []
-    opening = '([{'
-    closing = ')]}'
-    s = str(s).replace(", ",",")
-    
-    i = 0
-    while i < len(s):
-        char = s[i]
-        
-        # Handle opening brackets
-        if char in opening:
-            result.append(char + '\n' + '  ' * (indent + 1))
-            indent += 1
-            
-        # Handle closing brackets
-        elif char in closing:
-            result.append('\n' + '  ' * (indent - 1) + char)
-            indent -= 1
-            
-        # Handle commas
-        elif char == ',':
-            result.append(char + '\n' + '  ' * indent)
-            
-        # Handle other characters
-        else:
-            result.append(char)
-            
-        i += 1
-    
-    print(''.join(result))
-
 def send_post(message, link=None):
     """Send a message as a new post"""
     text = client_utils.TextBuilder().text(message) #.link('haesleinhuepf', 'https://haesleinhuepf.github.io')
@@ -57,30 +21,7 @@ def thread_to_text(thread, level=0):
     output = f"{upstream}{indent}{thread.post.author.handle}: {thread.post.record.text}\n"
     return output
 
-def image_to_url(image):
-    """
-    Convert an image to a URL.
-    """
-    if isinstance(image, str) and (image.startswith("data:image") or image.startswith("http")):
-        return image
-
-    import base64
-    import io
-    from PIL import Image
-
-    if isinstance(image, str):
-        return image
-
-    if isinstance(image, bytes):
-        image = Image.open(io.BytesIO(image))
-
-    buffered = io.BytesIO()
-    image.save(buffered, format="PNG")
-    img_str = base64.b64encode(buffered.getvalue()).decode()
-    return img_str
-
-
-def prompt_azure(message: str, model="gpt-4o", image=None):
+def prompt_azure(message: str, model="gpt-4o", image_url=None):
     """A prompt helper function that sends a message to Azure's OpenAI Service
     and returns only the text response.
     """
@@ -91,7 +32,7 @@ def prompt_azure(message: str, model="gpt-4o", image=None):
     model = model.replace("github_models:", "")
 
     from azure.ai.inference import ChatCompletionsClient
-    from azure.ai.inference.models import SystemMessage, UserMessage
+    from azure.ai.inference.models import SystemMessage, UserMessage, TextContentItem, ImageContentItem
     from azure.core.credentials import AzureKeyCredential
 
     client = ChatCompletionsClient(
@@ -99,17 +40,15 @@ def prompt_azure(message: str, model="gpt-4o", image=None):
         credential=AzureKeyCredential(token),
     )
 
-    if isinstance(message, str):
+    if image_url is None:
         message = [UserMessage(content=message)]
-    if image is not None:
-        image_url = image_to_url(image)
+    else:
         message = [UserMessage(
                 content=[
                     TextContentItem(text=message),
-                    ImageContentItem(image_url={"url": "data:image/png;base64," + image_url}),
+                    ImageContentItem(image_url={"url": image_url}),
                 ],
             )]
-
 
     response = client.complete(
         messages=message,
@@ -128,6 +67,13 @@ def respond(post_uri):
 
     print("Text:", text)
 
+    if thread.post.embed is not None and len(thread.post.embed.images) > 0:
+        image = thread.post.embed.images[0].fullsize
+        image_message = "Take the given image into account for answering."
+    else:
+        image = None
+        image_message = ""
+
     response = prompt_azure(f"""You are {BLUESKY_HANDLE}, a friendly social networking bot. Respond to the following conversation:
 
 # Conversation
@@ -136,13 +82,14 @@ def respond(post_uri):
 # Your response
 Reply to the conversation above as if you were a human talking to a human. 
 Focus on responding to the last message.
+{image_message}
 Keep your response short (max 150 characters).
-""").replace(BLUESKY_HANDLE + ":", "").strip()
+""", image_url=image).replace(BLUESKY_HANDLE + ":", "").strip()
     print("response:", response)
 
     if len(response) > 150:
         response = prompt_azure(f"""
-Shorten the following text to 300 characters by extracting the most important part. Respond with the shortened text only.
+Shorten the following text to 150 characters by extracting the most important part. Respond with the shortened text only.
 
 {response}
 """)
@@ -163,6 +110,7 @@ Shorten the following text to 300 characters by extracting the most important pa
         'py_type':'app.bsky.feed.post#replyRef'
     }
     print("reply_ref", reply_ref)
+    print("Response:", response)
 
     client.send_post(response, reply_to=reply_ref)
 
@@ -200,8 +148,3 @@ for notification in response.notifications:
 # mark notifications as processed (isRead=True)
 client.app.bsky.notification.update_seen({'seen_at': last_seen_at})
 print('Successfully processed notifications. Last seen at:', last_seen_at)
-
-
-
-
-
